@@ -30,3 +30,12 @@ class UserLoginForm(AuthenticationForm):
 
 
 
+class PromptForm(forms.Form):
+    PROMPT_CHOICES = [
+        ('prompt1', 'System Prompt 1'),
+        ('prompt2', 'System Prompt 2'),
+        ('prompt3', 'System Prompt 3'),
+        ('custom', 'Custom Prompt'),
+    ]
+    prompt = forms.ChoiceField(choices=PROMPT_CHOICES, required=True)
+    custom_prompt_text = forms.CharField(widget=forms.Textarea, required=False)

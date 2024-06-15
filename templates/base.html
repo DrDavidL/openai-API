@@ -32,6 +32,35 @@
             overflow-y: auto;
             /* Add vertical scrolling */
         }
+
+        #sidebar {
+            width: 250px;
+            /* Set the width of the sidebar */
+            position: fixed;
+            /* Fixed sidebar */
+            top: 0;
+            left: 0;
+            height: 100%;
+            /* Full-height */
+            background-color: #f8f9fa;
+            /* Light grey background */
+            padding: 15px;
+            /* Some padding */
+            overflow-y: auto;
+            /* Enable scrolling if needed */
+            border-right: 1px solid #dee2e6;
+            /* Add a border to the right */
+        }
+
+        .content {
+            margin-left: 260px;
+            /* Same as the width of the sidebar + some space */
+            padding: 15px;
+        }
+
+        #custom-prompt {
+            display: none;
+        }
     </style>
 </head>
 
@@ -45,9 +74,42 @@
     {% endfor %}
     </ul>
     {% endif %}
-    {% block content %}
+    
+    <div id="sidebar">
+        <h2>Select System Prompt</h2>
+        <form method="POST" action="{% url 'update_prompt' %}">
+            {% csrf_token %}
+            <div>
+                <label for="prompt">Choose a prompt:</label>
+                <select id="prompt" name="prompt">
+                    <option value="prompt1">System Prompt 1</option>
+                    <option value="prompt2">System Prompt 2</option>
+                    <option value="prompt3">System Prompt 3</option>
+                    <option value="custom">Custom Prompt</option>
+                </select>
+            </div>
+            <div id="custom-prompt">
+                <label for="custom_prompt_text">Enter custom prompt:</label>
+                <textarea id="custom_prompt_text" name="custom_prompt_text" rows="4" cols="50"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Update Prompt</button>
+        </form>
+    </div>
+    
+    <div class="content">
+        {% block content %}
+        {% endblock content %}
+    </div>
 
-    {% endblock content %}
+    <script>
+        document.getElementById('prompt').addEventListener('change', function() {
+            if (this.value === 'custom') {
+                document.getElementById('custom-prompt').style.display = 'block';
+            } else {
+                document.getElementById('custom-prompt').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>
