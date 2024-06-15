@@ -12,13 +12,13 @@
         <li class="list-group-item rounded d-flex justify-content-between align-items-start p-2 mb-3" style="background-color: white; color:#303030">
             <div class="ms-2 me-auto">
                 <div class="fw-bold">You ({{history.user.username}}) </div>
-                {{history.messageInput}}
+                <div class="markdown-content">{{history.messageInput}}</div>
             </div>
         </li>
         <li class="list-group-item rounded d-flex justify-content-between align-items-start p-2 mb-3" style="background-color: #6E00FF;color:white">
             <div class="ms-2 me-auto">
                 <div class="fw-bold">AI bot </div>
-                {{history.bot_response}}
+                <div class="markdown-content">{{history.bot_response}}</div>
             </div>
         </li>
         {% endfor %}
@@ -72,5 +72,22 @@
 
     window.onload = scrollToBottom;
     window.onunload = scrollToBottom;
+
+    // Function to render markdown with highlight.js
+    function renderMarkdown(content) {
+        var html = marked(content, {
+            highlight: function(code, lang) {
+                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                return hljs.highlight(code, { language }).value;
+            }
+        });
+        return html;
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.markdown-content').forEach((element) => {
+            element.innerHTML = renderMarkdown(element.textContent);
+        });
+    });
 </script>
 {% endblock content %}
