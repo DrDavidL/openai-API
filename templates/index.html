@@ -2,9 +2,8 @@
 
 {% block title %}BotHome - Home{% endblock title %}
 
-
 {% block content %}
-<div class="container" style="margin-top: 50px; max-height:100vh; overflow-y:scroll">
+<div class="container" style="margin-top: 50px; max-height:100vh; overflow-y:scroll" id="chat-container">
     {% if not get_history %}
     <h1 class="text-center">Hi {{request.user.username}} 👋, Let's Talk!🤖</h1>
     {% endif %}
@@ -24,24 +23,54 @@
         </li>
         {% endfor %}
     </ol>
-    <form action="" method="post" class="mt-3">
+    <form action="" method="post" class="mt-3" id="chat-form">
         {% csrf_token %}
         <label for="exampleFormControlTextarea1" class="form-label">Enter your prompt</label>
         <div class="d-flex mb-3 gap-2">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="How can i help you?"
-                name="userInput"></textarea>
-            <button class="btn btn-dark btn-lg" type="submit" id="btn" style="width: 80px;"><i
-                    class="bi bi-send-fill"></i></button>
+            <textarea class="form-control" id="userInput" rows="3" placeholder="How can I help you?" name="userInput"></textarea>
+            <button class="btn btn-update btn-lg" type="submit" id="btn" style="width: 80px;"><i class="bi bi-send-fill"></i></button>
+        </div>
+        <div id="loading" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
         <div class="d-flex justify-content-center m-3 align-items-center gap-3">
             {% if get_history %}
             <a href="{% url 'deleteChat'  %}" class="btn btn-warning">Delete Chat <i class="bi bi-x-square"></i></a>
             {% endif %}
-            <a href="{% url 'logout'  %}" class="link-danger text-decoration-none">Log out <i
-                    class="bi bi-door-open"></i></a>
+            <a href="{% url 'logout'  %}" class="link-danger text-decoration-none">Log out <i class="bi bi-door-open"></i></a>
         </div>
-
     </form>
-
 </div>
+<script>
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var userInput = document.getElementById('userInput');
+        if (userInput.value.trim() !== '') {
+            document.getElementById('loading').style.display = 'block';
+            this.submit();
+        }
+    });
+
+    document.getElementById('userInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            var chatForm = document.getElementById('chat-form');
+            var userInput = document.getElementById('userInput');
+            if (userInput.value.trim() !== '') {
+                document.getElementById('loading').style.display = 'block';
+                chatForm.submit();
+            }
+        }
+    });
+
+    function scrollToBottom() {
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    window.onload = scrollToBottom;
+    window.onunload = scrollToBottom;
+</script>
 {% endblock content %}

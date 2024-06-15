@@ -118,7 +118,7 @@ def DeleteHistory(request):
     messages.success(request, "All messages have been deleted")
     return redirect(request.META['HTTP_REFERER'])
 
-def logout_view(request):
+def logout_view(request):   
     logout(request)
     messages.success(request, "Successfully logged out")
     return redirect("main")

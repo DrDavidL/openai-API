@@ -28,39 +28,65 @@
 
         .history-container {
             max-height: 500px;
-            /* Set a maximum height for the container */
             overflow-y: auto;
-            /* Add vertical scrolling */
         }
 
         #sidebar {
             width: 250px;
-            /* Set the width of the sidebar */
             position: fixed;
-            /* Fixed sidebar */
             top: 0;
             left: 0;
             height: 100%;
-            /* Full-height */
             background-color: #f8f9fa;
-            /* Light grey background */
             padding: 15px;
-            /* Some padding */
             overflow-y: auto;
-            /* Enable scrolling if needed */
             border-right: 1px solid #dee2e6;
-            /* Add a border to the right */
         }
 
         .content {
             margin-left: 260px;
-            /* Same as the width of the sidebar + some space */
             padding: 15px;
         }
 
         #custom-prompt {
             display: none;
         }
+
+        #sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        #sidebar .small-title {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .btn-update {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-update:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .spinner-border .visually-hidden {
+            display: none;
+        }
+        
     </style>
 </head>
 
@@ -74,28 +100,29 @@
     {% endfor %}
     </ul>
     {% endif %}
-    
+
     <div id="sidebar">
-        <h2>Select System Prompt</h2>
+        <h2>Advanced Chat</h2>
+        <div class="small-title">Select System Prompt</div>
         <form method="POST" action="{% url 'update_prompt' %}">
             {% csrf_token %}
             <div>
                 <label for="prompt">Choose a prompt:</label>
-                <select id="prompt" name="prompt">
+                <select id="prompt" name="prompt" class="form-control">
                     <option value="prompt1">System Prompt 1</option>
                     <option value="prompt2">System Prompt 2</option>
                     <option value="prompt3">System Prompt 3</option>
                     <option value="custom">Custom Prompt</option>
                 </select>
             </div>
-            <div id="custom-prompt">
+            <div id="custom-prompt" class="mt-3">
                 <label for="custom_prompt_text">Enter custom prompt:</label>
-                <textarea id="custom_prompt_text" name="custom_prompt_text" rows="4" cols="50"></textarea>
+                <textarea id="custom_prompt_text" name="custom_prompt_text" rows="4" cols="50" class="form-control"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Update Prompt</button>
+            <button type="submit" class="btn btn-update mt-3">Update Prompt</button>
         </form>
     </div>
-    
+
     <div class="content">
         {% block content %}
         {% endblock content %}
