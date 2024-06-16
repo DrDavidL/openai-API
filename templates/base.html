@@ -49,7 +49,7 @@
             padding: 15px;
         }
 
-        #custom-prompt {
+        #custom-prompt-wrapper {
             display: none;
         }
 
@@ -114,7 +114,19 @@
         <div class="small-title">Select System Prompt</div>
         <form method="POST" action="{% url 'update_prompt' %}">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div>
+                <label for="prompt">Choose a prompt:</label>
+                <select id="prompt" name="prompt" class="form-control">
+                    <option value="prompt1">System Prompt 1</option>
+                    <option value="prompt2">System Prompt 2</option>
+                    <option value="prompt3">System Prompt 3</option>
+                    <option value="custom">Custom Prompt</option>
+                </select>
+            </div>
+            <div id="custom-prompt-wrapper" class="mt-3">
+                <label for="custom_prompt_text">Enter custom prompt:</label>
+                <textarea id="custom_prompt_text" name="custom_prompt_text" rows="4" cols="50" class="form-control"></textarea>
+            </div>
             <button type="submit" class="btn btn-update mt-3">Update Prompt</button>
         </form>
     </div>
@@ -133,15 +145,20 @@
             });
         });
 
-        document.getElementById('prompt').addEventListener('change', function() {
+        // Function to show/hide the custom prompt textarea based on the selected option
+        document.getElementById('prompt').addEventListener('change', function () {
+            var customPromptWrapper = document.getElementById('custom-prompt-wrapper');
             if (this.value === 'custom') {
-                document.getElementById('custom_prompt_text').parentElement.style.display = 'block';
+                customPromptWrapper.style.display = 'block';
             } else {
-                document.getElementById('custom_prompt_text').parentElement.style.display = 'none';
+                customPromptWrapper.style.display = 'none';
             }
         });
 
-        document.getElementById('chat-form').addEventListener('submit', function(event) {
+        // Trigger the change event on page load to set the correct initial state
+        document.getElementById('prompt').dispatchEvent(new Event('change'));
+
+        document.getElementById('chat-form').addEventListener('submit', function (event) {
             event.preventDefault();
             var userInput = document.getElementById('userInput');
             if (userInput.value.trim() !== '') {
@@ -150,7 +167,7 @@
             }
         });
 
-        document.getElementById('userInput').addEventListener('keypress', function(event) {
+        document.getElementById('userInput').addEventListener('keypress', function (event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
                 var chatForm = document.getElementById('chat-form');
@@ -173,7 +190,7 @@
         // Function to render markdown with highlight.js
         function renderMarkdown(content) {
             var html = marked(content, {
-                highlight: function(code, lang) {
+                highlight: function (code, lang) {
                     const language = hljs.getLanguage(lang) ? lang : 'plaintext';
                     return hljs.highlight(code, { language }).value;
                 }
