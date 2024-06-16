@@ -30,9 +30,9 @@ class UserLoginForm(AuthenticationForm):
 
 
 
-class PromptForm(forms.Form):
+class SystemPromptForm(forms.Form):
     PROMPT_CHOICES = [
-        ('prompt1', 'System Prompt 1'),
+        ('You are a friendly assistant, extra supportive', 'A Friendly Assistant'),
         ('prompt2', 'System Prompt 2'),
         ('prompt3', 'System Prompt 3'),
         ('custom', 'Custom Prompt'),

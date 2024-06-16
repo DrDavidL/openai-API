@@ -2,6 +2,10 @@
 
 {% block title %}BotHome - Home{% endblock title %}
 
+{% block extra_css %}
+    {{ highlight_css|safe }}
+{% endblock extra_css %}
+
 {% block content %}
 <div class="container" style="margin-top: 50px; max-height:100vh; overflow-y:scroll" id="chat-container">
     {% if not get_history %}
@@ -18,7 +22,7 @@
         <li class="list-group-item rounded d-flex justify-content-between align-items-start p-2 mb-3" style="background-color: #6E00FF;color:white">
             <div class="ms-2 me-auto">
                 <div class="fw-bold">AI bot </div>
-                <div class="markdown-content">{{history.bot_response}}</div>
+                <div class="markdown-content">{{history.bot_response|safe}}</div>
             </div>
         </li>
         {% endfor %}
